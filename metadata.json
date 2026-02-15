@@ -1,0 +1,7 @@
+{
+  "name": "Spark Focus OS",
+  "description": "A high-performance focus and productivity dashboard inspired by the Nothing OS aesthetic, featuring AI-powered task breakdown and an immersive dot-matrix timer.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
