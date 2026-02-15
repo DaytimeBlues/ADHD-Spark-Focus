@@ -56,7 +56,7 @@ const IgniteView: React.FC<IgniteViewProps> = ({ onBack, onComplete }) => {
           <button
             onClick={onBack}
             aria-label="Return home"
-            className="n-border n-border-hover n-press rounded-n-sm px-n-8 py-n-4 ndot text-lg mt-n-4 transition-all duration-n-fast ease-n-ease hover:bg-white/5"
+            className="n-border n-border-hover n-press rounded-full px-10 py-n-4 ndot text-lg mt-n-4 transition-all duration-n-fast ease-n-ease hover:bg-white/5"
           >
             DONE
           </button>
@@ -64,9 +64,9 @@ const IgniteView: React.FC<IgniteViewProps> = ({ onBack, onComplete }) => {
       ) : (
         <>
           {/* Progress bar */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/5">
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-white/5 rounded-full overflow-hidden">
             <div
-              className="h-full bg-n-red transition-all duration-1000 ease-linear"
+              className="h-full bg-n-red transition-all duration-1000 ease-linear rounded-full"
               style={{ width: `${progress * 100}%` }}
             />
           </div>
@@ -86,7 +86,7 @@ const IgniteView: React.FC<IgniteViewProps> = ({ onBack, onComplete }) => {
           </div>
 
           {/* Motivational pulse text */}
-          <p className="ndot text-xs text-n-red/60 mt-n-6 animate-glyph-breathe relative z-10">
+          <p className="ndot text-sm text-n-red/60 mt-n-6 animate-glyph-breathe relative z-10">
             {timeLeft > 240 ? 'GO GO GO' : timeLeft > 120 ? 'KEEP PUSHING' : timeLeft > 30 ? 'ALMOST THERE' : 'FINAL STRETCH'}
           </p>
 
@@ -95,7 +95,7 @@ const IgniteView: React.FC<IgniteViewProps> = ({ onBack, onComplete }) => {
             <button
               onClick={() => setIsActive(!isActive)}
               aria-label={isActive ? 'Pause sprint' : 'Resume sprint'}
-              className="n-border n-press border-n-red/30 w-20 h-20 rounded-n-md flex flex-col items-center justify-center gap-n-1 transition-all duration-n-fast ease-n-ease hover:bg-n-red-dim"
+              className="n-border n-press border-n-red/30 w-[72px] h-[72px] rounded-full bg-white/[0.03] backdrop-blur-[20px] flex flex-col items-center justify-center gap-n-1 transition-all duration-n-fast ease-n-ease hover:bg-n-red-dim"
             >
               <span className="material-symbols-outlined text-n-red text-xl">
                 {isActive ? 'pause' : 'play_arrow'}
@@ -108,7 +108,7 @@ const IgniteView: React.FC<IgniteViewProps> = ({ onBack, onComplete }) => {
             <button
               onClick={onBack}
               aria-label="Cancel sprint"
-              className="n-border n-press border-white/10 w-20 h-20 rounded-n-md flex flex-col items-center justify-center gap-n-1 transition-all duration-n-fast ease-n-ease hover:bg-white/5"
+              className="n-border n-press border-white/10 w-[72px] h-[72px] rounded-full bg-white/[0.03] backdrop-blur-[20px] flex flex-col items-center justify-center gap-n-1 transition-all duration-n-fast ease-n-ease hover:bg-white/5"
             >
               <span className="material-symbols-outlined text-xl opacity-40">close</span>
               <span className="ndot text-2xs opacity-40 tracking-widest">QUIT</span>

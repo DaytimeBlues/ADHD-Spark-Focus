@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     const isGHPages = process.env.GITHUB_PAGES === 'true';
     return {
-      base: isGHPages ? '/spark-adhd-backup/' : '/',
+      base: isGHPages ? '/spark-focus-os/' : '/',
       server: {
         port: 3000,
         host: '0.0.0.0',

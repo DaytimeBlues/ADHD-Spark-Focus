@@ -40,7 +40,7 @@ const TaskListView: React.FC<TaskListViewProps> = ({ tasks, onAddTask, onToggleT
             placeholder="ADD TASK..."
             aria-label="New task title"
             autoComplete="off"
-            className="w-full bg-transparent n-border rounded-n-sm p-n-4 font-body text-sm text-n-white transition-colors duration-n-fast placeholder:opacity-25 placeholder:font-body placeholder:text-sm"
+            className="w-full bg-white/[0.03] n-border rounded-full p-n-4 px-6 font-body text-sm text-n-white transition-colors duration-n-fast placeholder:opacity-25 placeholder:font-body placeholder:text-sm"
           />
           <button
             type="submit"
