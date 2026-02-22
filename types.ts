@@ -8,7 +8,8 @@ export enum Screen {
   FOG_CUTTER = 'fog_cutter',
   IGNITE = 'ignite',
   CHECK_IN = 'check_in',
-  MINDSET = 'mindset'
+  MINDSET = 'mindset',
+  INBOX = 'inbox'
 }
 
 export interface Task {

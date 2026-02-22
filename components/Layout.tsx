@@ -7,6 +7,7 @@ interface LayoutProps {
   currentScreen: Screen;
   onNavigate: (screen: Screen) => void;
   streak: number;
+  captureBubble?: React.ReactNode;
 }
 
 const navItems = [
@@ -16,7 +17,7 @@ const navItems = [
   { screen: Screen.PLAN, icon: 'calendar_today', label: 'PLAN' },
 ];
 
-const Layout: React.FC<LayoutProps> = ({ children, currentScreen, onNavigate, streak }) => {
+const Layout: React.FC<LayoutProps> = ({ children, currentScreen, onNavigate, streak, captureBubble }) => {
   const isFullscreen = currentScreen === Screen.TIMER || currentScreen === Screen.IGNITE;
 
   return (
@@ -40,6 +41,9 @@ const Layout: React.FC<LayoutProps> = ({ children, currentScreen, onNavigate, st
       <main className="flex-1 overflow-y-auto no-scrollbar relative">
         {children}
       </main>
+
+      {/* Capture Bubble overlay */}
+      {!isFullscreen && captureBubble}
 
       {/* Bottom Navigation */}
       {!isFullscreen && (

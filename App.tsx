@@ -10,7 +10,9 @@ import CheckInView from './components/CheckInView';
 import MindsetView from './components/MindsetView';
 import FocusView from './components/FocusView';
 import PlanView from './components/PlanView';
+import InboxView from './components/InboxView';
 import Layout from './components/Layout';
+import { CaptureBubble } from './components/capture';
 
 const STORAGE_KEY_TASKS = 'spark_tasks';
 const STORAGE_KEY_STREAK = 'spark_streak';
@@ -105,6 +107,8 @@ const App: React.FC = () => {
         );
       case Screen.PLAN:
         return <PlanView tasks={tasks} onToggleTask={toggleTask} onAssignDay={assignDay} />;
+      case Screen.INBOX:
+        return <InboxView onBack={() => setCurrentScreen(Screen.HOME)} onAddTask={addTask} />;
       default:
         return (
           <div className="flex flex-col items-center justify-center h-full gap-n-4 px-n-6">
@@ -122,6 +126,9 @@ const App: React.FC = () => {
       currentScreen={currentScreen} 
       onNavigate={setCurrentScreen} 
       streak={streak}
+      captureBubble={
+        <CaptureBubble onNavigateInbox={() => setCurrentScreen(Screen.INBOX)} />
+      }
     >
       {renderScreen()}
     </Layout>
