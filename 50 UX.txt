@@ -1,0 +1,73 @@
+To assist an LLM in generating an app, instructions must move beyond abstract design feelings to concrete systems, constraints, and logical rules. LLMs excel at pattern matching and following strict schemas.
+
+Here are 50 UI/UX concepts derived from the provided texts, structured with specific implementation instructions for an LLM to generate high-quality code and design.
+
+### **I. Systematization & Constraints**
+*The most effective way for an LLM to design is to define the "rules of the universe" before generating specific components.*
+
+1.  **Feature-First Design:** Do not generate the application "shell" (navigation, sidebar) first. Start by generating the specific interface for a single core feature (e.g., "flight search form"). **Implementation:** Prompt the LLM to build the central component in isolation before wrapping it in a layout.
+2.  **Constrained Value Systems:** Avoid picking arbitrary pixels or hex codes. **Implementation:** Define a `spacing` object (e.g., `4, 8, 12, 16, 24, 32, 48, 64`) and force the LLM to snap all margins/padding to these values.
+3.  **Type Scaling:** Do not use random font sizes. **Implementation:** Define a strict type scale map (e.g., `xs: 12px`, `sm: 14px`, `base: 16px`, `lg: 18px`, `xl: 20px`, `2xl: 24px`) and reference these keys in the code.
+4.  **Color Palettes over Single Hexes:** Do not generate a single "blue" hex code. **Implementation:** Generate a color object with 8–10 shades per color (e.g., `blue-100` to `blue-900`) to allow for nuance in hover states and backgrounds.
+5.  **HSL over Hex:** Use HSL (Hue, Saturation, Lightness) for programmatic color manipulation. **Implementation:** instruct the LLM to define colors using HSL variables so it can programmatically adjust lightness/saturation for hover states without breaking the color harmony.
+6.  **Grid Independence:** Do not force elements to fill the full screen width or grid columns if they don't need to. **Implementation:** Apply `max-width` containers to forms and text blocks to ensure optimal readability, rather than `width: 100%`.
+7.  **Relative Sizing Limits:** Do not set component padding using `em` based on font size, as it scales disproportionately. **Implementation:** Use `rem` or `px` for padding and margins to maintain structural integrity regardless of text size.
+8.  **Systematic Shadows:** Define a Z-axis system. **Implementation:** Create a shadow utility class set: `shadow-sm` (button), `shadow-md` (dropdown), `shadow-lg` (modal), and apply them based on the element's "elevation".
+9.  **Standard Nomenclature:** Use standard design pattern names (e.g., `Decorator`, `Factory`, `Command`) in class names to succinctly describe design intent to future LLM readers.
+10. **One Language per File:** Minimize language mixing. **Implementation:** If generating a Java file, do not embed HTML or JavaScript snippets inside Strings; separate them into distinct files to reduce confusion.
+
+### **II. Visual Hierarchy & Clarity**
+*LLMs must be taught that "making it pop" means managing contrast and weight, not just increasing size.*
+
+11. **Hierarchy via Color:** Do not rely solely on size for hierarchy. **Implementation:** Use softer colors (greys) for secondary text rather than just shrinking the font size.
+12. **De-emphasis over Emphasis:** If a primary element doesn't stand out, do not make it bigger; make the competing elements smaller or lighter. **Implementation:** Apply `opacity-75` or a lighter text color class to metadata and labels.
+13. **Label Removal:** Avoid `Label: Value` formats if the format is self-evident (e.g., email, phone). **Implementation:** Render the data directly. If a label is required, apply a utility class to de-emphasize it (smaller, lighter weight).
+14. **Document vs. Visual Hierarchy:** Do not use HTML tags (`<h1>`, `<h2>`) solely for sizing. **Implementation:** Use semantic tags for structure, but apply CSS classes to control visual size (e.g., an `<h1>` can have a `.text-lg` class, it doesn't need to be huge).
+15. **Balance Weight and Contrast:** If an icon is "heavy" (solid), lower its contrast. **Implementation:** If using a solid icon next to text, apply a lighter text color class to the icon to balance the visual weight.
+16. **Semantics are Secondary:** Do not make every "delete" button bright red. **Implementation:** Reserve high-contrast/destructive styling for the *primary* action on a page. Secondary destructive actions should be text links or outlined buttons.
+17. **Link Styling:** Do not make every link blue and underlined. **Implementation:** For navigation lists or secondary links, use the default text color and only apply a color shift or underline on `:hover`.
+18. **Avoid Ambiguous Spacing:** Ensure grouping is obvious via whitespace. **Implementation:** Ensure `margin-bottom` between groups is at least 2x the `margin-bottom` between elements inside a group.
+19. **Line Length:** Restrict text block widths for readability. **Implementation:** Hard-code `max-width` on paragraph elements to roughly `45-75` characters (`20-35em`).
+20. **Baseline Alignment:** Do not center-align text of different sizes on a single line. **Implementation:** Use flexbox `align-items: baseline` rather than `center` when mixing large and small text on a horizontal axis.
+
+### **III. Psychology & User Interaction**
+*Use "Laws of UX" to guide the LLM's logic decisions regarding user flow.*
+
+21. **Jakob’s Law (Familiarity):** Do not reinvent common patterns. **Implementation:** Use standard icon libraries (like a magnifying glass for search) and standard placements (logo top left) to match user mental models.
+22. **Fitts’ Law (Touch Targets):** Increase clickable areas. **Implementation:** When generating buttons or mobile tap targets, ensure `padding` creates a hit area of at least 44x44 pixels, regardless of the visual icon size.
+23. **Hick’s Law (Choice Paralysis):** Minimize options. **Implementation:** If generating a list with >5 options, implement a "Recommended" badge on one item or hide less important options behind a "Show More" disclosure.
+24. **Miller’s Law (Chunking):** Group information. **Implementation:** When generating forms with >7 fields, split them into `<fieldset>` groups with distinct headers rather than one long list.
+25. **Postel’s Law (Input/Output):** Be liberal in input acceptance. **Implementation:** When creating form validation logic, strip whitespace and formatting characters (like parentheses in phone numbers) programmatically rather than returning an error to the user.
+26. **Peak-End Rule:** Optimize success states. **Implementation:** When generating a "success" or "completion" modal, add celebratory UI elements (illustrations or bold typography) to ensure a positive final memory of the interaction.
+27. **Doherty Threshold (Performance):** Cheat perceived performance. **Implementation:** Use optimistic UI updates (update the UI immediately before the server responds) or generate skeleton screens (placeholders) for loading states <400ms.
+28. **Tesler’s Law (Complexity):** Do not simplify to the point of abstraction. **Implementation:** Handle complexity in the code (backend) rather than forcing the user to sort or filter raw data manually.
+29. **Zeigarnik Effect (Incomplete Tasks):** Visualize progress. **Implementation:** For multi-step forms, generate a progress bar component that visually indicates how close the user is to completion.
+30. **Affordances:** Buttons must look like buttons. **Implementation:** Apply distinct shadows or borders to interactive elements. Do not rely solely on color to indicate clickability.
+
+### **IV. Code Cleanliness & Structure (for the LLM output)**
+*An LLM creating an app must output code that is maintainable and "Clean."*
+
+31. **Small Functions:** Do not generate massive functions. **Implementation:** Enforce a "step-down rule." If a function contains nested `if/else` or `switch` statements, extract those blocks into separate, descriptive functions.
+32. **Meaningful Names:** Do not use variables like `d` or `list1`. **Implementation:** Use intention-revealing names like `elapsedTimeInDays` or `flaggedCells`. Avoid encoding types in names (e.g., `accountList` → `accounts`).
+33. **Avoid Magic Numbers:** Do not leave raw numbers in the UI code. **Implementation:** Define constants like `MAX_PASSWORD_ATTEMPTS` or `ANIMATION_DURATION` at the top of the file or in a config file.
+34. **Single Responsibility Principle (SRP):** Classes should have one reason to change. **Implementation:** Separate the "construction" of objects (factories/main) from the "use" of objects. Don't mix business logic with UI rendering code.
+35. **DTOs vs. Objects:** Distinguish between data and behavior. **Implementation:** Use Data Transfer Objects (public variables, no functions) for raw data, and Objects (private variables, public functions) for business logic. Do not create hybrids.
+36. **Exceptions over Error Codes:** Do not return `-1` or `false` for errors. **Implementation:** Throw exceptions so the calling code isn't cluttered with error-checking logic. Separate error handling from the main logic.
+37. **Format Consistency:** Enforce a team style. **Implementation:** If the LLM generates a Java file, ensure standard indentation and vertical spacing (blank lines between methods) to create "vertical openness".
+38. **Avoid Feature Envy:** Methods should not be more interested in another class than their own. **Implementation:** If a method only manipulates data from another object, move that method to the object it manipulates.
+39. **Dependency Injection:** Decouple construction. **Implementation:** Pass dependencies (like a `Database` or `Logger`) into constructors rather than instantiating them with `new` inside the class.
+40. **Delete Dead Code:** Do not comment out old code. **Implementation:** If the LLM refactors a section, delete the old implementation entirely. Do not leave "zombie code" in comments.
+
+### **V. Advanced UI Tactics (Color, Depth, & Images)**
+*Specific visual tactics for the LLM to apply during CSS/Style generation.*
+
+41. **Accessible Contrast:** Do not rely on opacity for text contrast. **Implementation:** When placing text on colored backgrounds, hand-pick a specific accessible color (flipping contrast) rather than using `opacity: 0.6`, which can look washed out.
+42. **Warm vs. Cool Greys:** Do not use `#808080`. **Implementation:** Saturate grey colors slightly with blue (cool) or yellow (warm) to prevent the UI from looking "muddy" or "dirty".
+43. **Emulate Light Sources:** Consistent shadows. **Implementation:** Assume a light source from the top-down. Highlights go on top borders; shadows go on bottom borders. Never apply both equally.
+44. **Overlap for Depth:** Break the grid. **Implementation:** Use negative margins (e.g., `margin-top: -60px`) to pull cards over background headers, creating a layered, "designed" look.
+45. **Supercharge Defaults:** Don't use default browser bullets. **Implementation:** Replace `<ul>` bullets with SVG icons (checkmarks, locks) to add visual interest to standard lists.
+46. **Accent Borders:** Add "flare" without graphics. **Implementation:** Apply a `border-top` with a primary brand color to plain white cards to add personality without needing images.
+47. **Decorate Backgrounds:** Avoid plain white voids. **Implementation:** Use very subtle patterns, geometric shapes, or slight color tints on large background areas to differentiate sections.
+48. **User-Content Safety:** Never trust user image ratios. **Implementation:** Always use `background-size: cover` or `object-fit: cover` on user-uploaded avatars or images to prevent layout breakage.
+49. **Empty States:** Do not leave empty data tables blank. **Implementation:** Generate a specific "Empty State" component with an illustration and a primary call-to-action button when lists have zero items.
+50. **Button Shadows:** Use shadows for interaction. **Implementation:** When a button is clicked (`:active`), reduce the shadow size to simulate the button being physically pressed into the page.
