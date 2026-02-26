@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import CaptureService, { CaptureItem, CaptureStatus } from '../services/CaptureService';
 
 interface InboxViewProps {

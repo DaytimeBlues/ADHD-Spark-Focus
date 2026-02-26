@@ -1,5 +1,5 @@
-
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
+import { useCountdown } from '../hooks/useCountdown';
 
 interface IgniteViewProps {
   onBack: () => void;
@@ -9,29 +9,19 @@ interface IgniteViewProps {
 const SPRINT_DURATION = 5 * 60; // 5 minutes
 
 const IgniteView: React.FC<IgniteViewProps> = ({ onBack, onComplete }) => {
-  const [timeLeft, setTimeLeft] = useState(SPRINT_DURATION);
-  const [isActive, setIsActive] = useState(true);
-  const [isDone, setIsDone] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const onCompleteRef = useRef(onComplete);
-  onCompleteRef.current = onComplete;
+  const { timeLeft, isActive, isDone, progress, pause, resume } = useCountdown({
+    initialTime: SPRINT_DURATION,
+    onComplete,
+    autoStart: true,
+  });
 
-  useEffect(() => {
-    if (isActive && timeLeft > 0) {
-      timerRef.current = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0 && !isDone) {
-      setIsActive(false);
-      setIsDone(true);
-      onCompleteRef.current();
+  const toggleActive = () => {
+    if (isActive) {
+      pause();
+    } else {
+      resume();
     }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isActive, timeLeft, isDone]);
-
-  const progress = 1 - timeLeft / SPRINT_DURATION;
+  };
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -93,7 +83,7 @@ const IgniteView: React.FC<IgniteViewProps> = ({ onBack, onComplete }) => {
           {/* Controls */}
           <div className="flex gap-n-6 mt-n-12 relative z-10">
             <button
-              onClick={() => setIsActive(!isActive)}
+              onClick={toggleActive}
               aria-label={isActive ? 'Pause sprint' : 'Resume sprint'}
               className="n-border n-press border-n-red/30 w-[72px] h-[72px] rounded-full bg-white/[0.03] backdrop-blur-[20px] flex flex-col items-center justify-center gap-n-1 transition-all duration-n-fast ease-n-ease hover:bg-n-red-dim"
             >

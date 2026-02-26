@@ -1,5 +1,5 @@
-
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
+import { useCountdown } from '../hooks/useCountdown';
 
 interface TimerViewProps {
   onBack: () => void;
@@ -7,25 +7,19 @@ interface TimerViewProps {
 }
 
 const TimerView: React.FC<TimerViewProps> = ({ onBack, onComplete }) => {
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
-  const [isActive, setIsActive] = useState(true);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const onCompleteRef = useRef(onComplete);
-  onCompleteRef.current = onComplete;
+  const { timeLeft, isActive, pause, resume } = useCountdown({
+    initialTime: 25 * 60,
+    onComplete,
+    autoStart: true,
+  });
 
-  useEffect(() => {
-    if (isActive && timeLeft > 0) {
-      timerRef.current = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      setIsActive(false);
-      onCompleteRef.current();
+  const toggleActive = () => {
+    if (isActive) {
+      pause();
+    } else {
+      resume();
     }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isActive, timeLeft]);
+  };
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
@@ -63,7 +57,7 @@ const TimerView: React.FC<TimerViewProps> = ({ onBack, onComplete }) => {
       {/* Controls */}
       <div className="w-full flex justify-between items-center px-n-8 mb-n-12 relative z-10">
         <button
-          onClick={() => setIsActive(!isActive)}
+          onClick={toggleActive}
           aria-label={isActive ? 'Pause timer' : 'Resume timer'}
           className="n-border n-press border-n-red/30 w-20 h-20 rounded-full bg-white/[0.03] backdrop-blur-[20px] flex flex-col items-center justify-center gap-n-1 transition-all duration-n-fast ease-n-ease hover:bg-n-red-dim"
         >

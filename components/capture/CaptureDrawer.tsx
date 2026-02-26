@@ -75,9 +75,26 @@ const CaptureDrawer: React.FC<CaptureDrawerProps> = ({ open, onClose }) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Warn about large files that may exceed localStorage quota
+    const MAX_PHOTO_SIZE_MB = 2;
+    if (file.size > MAX_PHOTO_SIZE_MB * 1024 * 1024) {
+      alert(`Photo is too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Max ${MAX_PHOTO_SIZE_MB}MB recommended to avoid storage issues.`);
+      e.target.value = '';
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
       const dataUrl = reader.result as string;
+
+      // Additional runtime check for data URL size (base64 inflates ~33%)
+      if (dataUrl.length > 3 * 1024 * 1024) {
+        alert('Processed photo is too large for storage. Try a smaller image.');
+        setSaving(false);
+        e.target.value = '';
+        return;
+      }
+
       setSaving(true);
       try {
         CaptureService.save({ source: 'photo', raw: file.name, attachmentUri: dataUrl });
@@ -87,6 +104,7 @@ const CaptureDrawer: React.FC<CaptureDrawerProps> = ({ open, onClose }) => {
         onClose();
       } catch (error) {
         console.error('[CaptureDrawer] photo save error:', error);
+        alert('Failed to save photo. Storage may be full.');
         setSaving(false);
       }
     };
